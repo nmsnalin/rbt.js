@@ -1,20 +1,21 @@
 /* @flow */
 
+(function (root     ) {
 "use strict";
 
-type color = number;
-type tree<T> = Tree<T> | Empty<T>;
+                    
+                                  
 
 var RED = 0, BLACK = 1;
 
-class Tree<T> {
-  color: color;
-  left: tree<T>;
-  right: tree<T>;
-  key: string;
-  value: T;
 
-  constructor(color: color, left: tree<T>, key: string, value: T, right: tree<T>) {
+               
+                
+                 
+              
+           
+
+  function Tree(color       , left         , key        , value   , right)          {
     this.color = color;
     this.left = left;
     this.right = right;
@@ -22,7 +23,7 @@ class Tree<T> {
     this.value = value;
   }
 
-  has(key: string): boolean {
+  Tree.prototype.has=function(key)                  {
     if (key < this.key) {
       return this.left.has(key);
     } else if (key > this.key) {
@@ -30,11 +31,11 @@ class Tree<T> {
     } else {
       return true;
     }
-  }
+  };
 
-  add(key: string, value: T): tree<T> {
+  Tree.prototype.add=function(key        , value)             {
     if (key < this.key) {
-      return this._balance(
+      return this.$Tree_balance(
         this.color,
         this.left.add(key, value),
         this.key,
@@ -42,7 +43,7 @@ class Tree<T> {
         this.right
       );
     } else if (key > this.key) {
-      return this._balance(
+      return this.$Tree_balance(
         this.color,
         this.left,
         this.key,
@@ -50,11 +51,11 @@ class Tree<T> {
         this.right.add(key, value)
       );
     } else {
-      return this;
+      return new Tree(this.color, this.left, this.key, value, this.right);
     }
-  }
+  };
 
-  _balance(color: color, left: tree<T>, key: string, value: T, right: tree<T>): tree<T> {
+  Tree.prototype.$Tree_balance=function(color       , left         , key        , value   , right)                   {
     if (color === BLACK) {
       // case 1
       // ------
@@ -131,9 +132,9 @@ class Tree<T> {
       }
     }
     return new Tree(color, left, key, value, right);
-  }
+  };
 
-  get(key: string): ?T {
+  Tree.prototype.get=function(key)             {
     if (key < this.key) {
       return this.left.get(key);
     } else if (key > this.key) {
@@ -141,47 +142,88 @@ class Tree<T> {
     } else {
       return this.value;
     }
-  }
+  };
 
-  iter(fn: (k: string, v: T) => void): void {
+  Tree.prototype.count=function()         {
+    return this.left.count() + 1 + this.right.count();
+  };
+
+  Tree.prototype.iter=function(fn)                                  {
     this.left.iter(fn);
     fn(this.key, this.value);
     this.right.iter(fn);
-  }
+  };
 
-  map(fn: (k: string, v: T) => T): tree<T> {
+  Tree.prototype.map=function(fn)                                  {
     var left = this.left.map(fn),
         value = fn(this.key, this.value),
         right = this.right.map(fn);
     return new Tree(this.color, left, this.key, value, right);
-  }
+  };
 
-  toObject(): Object {
-    var obj = Object.create(null);
+  Tree.prototype.reduce=function(fn                                , acc)       {
+    acc = this.left.reduce(fn, acc);
+    acc = fn(this.key, this.value, acc);
+    return this.right.reduce(fn, acc);
+  };
+
+  Tree.prototype.toObject=function()         {
+    var obj = {};
     this.iter(function (k, v) { obj[k] = v; });
     return obj;
-  }
-}
+  };
 
-class Empty<T> {
-  has(key: string): boolean {
+
+function Empty(){}
+  Empty.prototype.has=function(key)                  {
     return false;
-  }
+  };
 
-  add(key: string, value: T): tree<T> {
+  Empty.prototype.add=function(key        , value)             {
     return new Tree(RED, empty, key, value, empty);
-  }
+  };
 
-  get(key: string): ?T {
+  Empty.prototype.get=function(key)             {
     return null;
-  }
+  };
 
-  iter(fn: (k: string, v: T) => void): void {}
-  map(fn: (k: string, v: T) => T): tree<T> { return this; }
+  Empty.prototype.count=function()         {
+    return 0;
+  };
 
-  toObject(): Object {
-    return Object.create(null);
-  }
-}
+  Empty.prototype.iter=function(fn)                                  {};
+  Empty.prototype.map=function(fn)                                  { return this; };
+  Empty.prototype.reduce=function(fn                                , acc)       { return acc; };
+
+  Empty.prototype.toObject=function()         {
+    return {};
+  };
+
 
 var empty = new Empty();
+
+function fromObject(obj        )            {
+  var t = empty;
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      t = t.add(key, obj[key]);
+    }
+  }
+  return t;
+}
+
+var moduleObj      = {
+  empty: empty,
+  RBTree: Tree,
+  fromObject: fromObject,
+};
+
+if (typeof exports !== 'undefined') {
+  if (typeof module !== 'undefined' && module.exports) {
+    exports = module.exports = moduleObj;
+  } else {
+    root.rbtree = moduleObj;
+  }
+}
+
+})(this);

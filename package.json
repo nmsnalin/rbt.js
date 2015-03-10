@@ -1,0 +1,29 @@
+{
+  "name": "rbt",
+  "version": "0.0.1",
+  "description": "Functional Red-Black Tree Map",
+  "main": "dist/rbt.js",
+  "devDependencies": {
+    "jasmine-node": "^1.14.5",
+    "react-tools": "^0.12.2",
+    "uglify-js": "^2.4.16"
+  },
+  "scripts": {
+    "test": "make test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pyrocat101/rbt.js"
+  },
+  "keywords": [
+    "data structure",
+    "functional programming",
+    "red-black tree"
+  ],
+  "author": "Linjie Ding",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pyrocat101/rbt.js/issues"
+  },
+  "homepage": "https://github.com/pyrocat101/rbt.js"
+}
