@@ -221,9 +221,9 @@ var moduleObj: any = {
 if (typeof exports !== 'undefined') {
   if (typeof module !== 'undefined' && module.exports) {
     exports = module.exports = moduleObj;
-  } else {
-    root.rbtree = moduleObj;
   }
+} else {
+  root.rbtree = moduleObj;
 }
 
 })(this);

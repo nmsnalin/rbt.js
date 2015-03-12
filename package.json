@@ -1,6 +1,6 @@
 {
   "name": "rbt",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Functional Red-Black Tree Map",
   "main": "dist/rbt.js",
   "devDependencies": {
