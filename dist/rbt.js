@@ -55,6 +55,16 @@ var RED = 0, BLACK = 1;
     }
   };
 
+  Tree.prototype.set=function(key        , value)          {
+    if (key < this.key) {
+      this.left.set(key, value);
+    } else if (key > this.key) {
+      this.right.set(key, value);
+    } else {
+      this.value = value;
+    }
+  };
+
   Tree.prototype.$Tree_balance=function(color       , left         , key        , value   , right)                   {
     if (color === BLACK) {
       // case 1
@@ -181,6 +191,10 @@ function Empty(){}
 
   Empty.prototype.add=function(key        , value)             {
     return new Tree(RED, empty, key, value, empty);
+  };
+
+  Empty.prototype.set=function(key        , value)          {
+    throw new Error("invalid key: " + key);
   };
 
   Empty.prototype.get=function(key)             {

@@ -55,6 +55,16 @@ class Tree<T> {
     }
   }
 
+  set(key: string, value: T): void {
+    if (key < this.key) {
+      this.left.set(key, value);
+    } else if (key > this.key) {
+      this.right.set(key, value);
+    } else {
+      this.value = value;
+    }
+  }
+
   _balance(color: color, left: tree<T>, key: string, value: T, right: tree<T>): tree<T> {
     if (color === BLACK) {
       // case 1
@@ -181,6 +191,10 @@ class Empty<T> {
 
   add(key: string, value: T): tree<T> {
     return new Tree(RED, empty, key, value, empty);
+  }
+
+  set(key: string, value: T): void {
+    throw new Error("invalid key: " + key);
   }
 
   get(key: string): ?T {

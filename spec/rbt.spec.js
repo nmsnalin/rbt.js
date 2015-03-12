@@ -89,4 +89,11 @@ describe('rbtree', function () {
     var t = rbtree.fromObject({a:1, b:2, c:3});
     expect(t.toObject()).toEqual({a:1, b:2, c:3});
   });
+
+  it('can mutate value associated with a key', function () {
+    var t = rbtree.fromObject({a:1, b:2, c:3});
+    t.set('a', 42);
+    expect(t.toObject()).toEqual({a:42, b:2, c:3});
+    expect(function () { t.set('d', 4); }).toThrow("invalid key: d");
+  });
 });
